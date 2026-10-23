@@ -1,5 +1,18 @@
 # Actual test record — 2026-10-23
 
+## Linux CI dependency download timeout
+
+[Run 39940723230](https://github.com/o8bo/mandarin/actions/runs/39940723230)
+passed the Windows source/Qt and GTK/X11 jobs. The Ubuntu source/Qt job
+was cancelled at its 20-minute limit while downloading packages from
+`azure.archive.ubuntu.com`; its tests did not start. This was not a source
+upload failure. The replacement CI helper uses the official Ubuntu HTTPS
+archive with signature verification, bounded retries/timeouts, and
+`--no-install-recommends`. All conversion engines and test steps are retained.
+The helper runs only on disposable Ubuntu 24.04 GitHub Actions runners and
+does not alter Linux Mint installations. Native CI verification of this fix
+is pending until the next run completes.
+
 ## Current native Windows result
 
 [Run 39939527182](https://github.com/o8bo/mandarin/actions/runs/39939527182), source `08bcaf537cd39655305fa8f43504337bc4ae8b82`,
