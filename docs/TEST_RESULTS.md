@@ -1,10 +1,47 @@
 # Actual test record — 2026-10-23
 
+## Current native Windows result
+
+[Run 39939527182](https://github.com/o8bo/mandarin/actions/runs/39939527182), source `08bcaf537cd39655305fa8f43504337bc4ae8b82`,
+**SUCCESS** on Windows Server 2022 x64 / CPython 3.12.10. Source suite:
+**32 run, 28 passed, 0 failures/errors, 4 explicit optional-engine skips**.
+The portable PE32+ AMD64 executable passed all 12 packaged checks, and the
+unpacked ZIP repeated all 12 with build Python removed from PATH. The downloaded
+ZIP and EXE hashes were independently checked on the Linux workspace.
+
+| Windows check | Actual result |
+|---|---|
+| Qt startup / file-selection model | PASS on runner |
+| Synthetic Qt local drop / radial mouse and keyboard | PASS on runner |
+| Pillow images, Arabic/Japanese names | PASS |
+| No-overwrite, collision-safe publication, locked destination | PASS |
+| Batch conversion, partial failure/cancellation | PASS |
+| Native Job/process-tree cancellation, subprocess errors | PASS |
+| pypdf merge/split/rotate; packaged image-to-PDF/rotation | PASS |
+| Safe archive processing | PASS |
+| PE32+ AMD64 / bundled Python / ZIP extraction and relaunch | PASS |
+| FFmpeg audio/video | NOT TESTED — 2 source tests skipped |
+| Poppler PDF rasterization | NOT TESTED — 1 source test skipped |
+| LibreOffice document conversion | NOT TESTED — 1 source test skipped |
+| Interactive Windows 11 / native Explorer OLE / native dialogs | NOT TESTED |
+| Fresh no-Python Windows 11 machine, DPI/multiple monitors | NOT TESTED |
+
+Windows ZIP SHA-256:
+`37eda3a5ac8095ec1021e265153463553b9da1028cc70b8698b8f9402d81b5a0`.
+EXE SHA-256:
+`612a51d44a300d958214a55fa8d943002ab69c1a3457dd39b86ef47733216697`.
+ZIP size: 49,143,575 bytes; EXE: 3,435,707 bytes.
+[Candidate artifact](https://github.com/o8bo/mandarin/actions/runs/39939527182/artifacts/12495452024) ·
+[diagnostic reports](https://github.com/o8bo/mandarin/actions/runs/39939527182/artifacts/12495436992).
+
+The following sections preserve the earlier stages and the failed first attempt;
+they are historical records, not replacements for the current result above.
+
 Development host: Linux Mint / X11, x86-64, glibc 2.39, system Python 3.12.3.
 No Windows host, VM, Wine or Windows runner was available/executed. Windows-native
 claims below remain **NOT TESTED**, including shared code when run on Windows.
 
-## Results
+## Pre-publication baseline results (historical)
 
 | Feature | Linux | Windows |
 |---|---|---|
@@ -169,3 +206,14 @@ The original failed logs and diagnostics remain locally under `verification/` an
 in the linked GitHub run. FFmpeg (two tests), Poppler rasterization (one test) and
 LibreOffice (one test) were absent and explicitly skipped, not treated as passed.
 Local targeted regression after the fixes: 10 cases PASS. Native rerun pending.
+
+## Successful native rerun
+
+The raw ZIP-name, explicit UTF-8 fixture and Qt event-loop fixes were verified
+on Windows in the linked successful rerun. No assertions were removed and the
+Qt worker deadline stayed 10 seconds. Required tests passed; the four optional
+converter skips remain visible. The runner also confirmed its Windows x64 host,
+PE architecture, bundled runtime components, SHA-256, safe extraction and both
+functional smoke reports. Complete build/test logs and original JSON reports
+are retained locally in ignored `verification/` and in the linked run/artifacts.
+The compiled Windows executable was not run on Linux.

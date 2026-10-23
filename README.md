@@ -3,10 +3,13 @@
 Local file conversion with a radial menu. Keep files on your own computer,
 choose a format and save a new output without overwriting the original.
 
-**v0.1.0 release candidate, unpublished.** Linux Mint GTK/X11 is tested.
-The first native Windows Server CI run exposed test portability issues; fixes
-and packaged-build verification are in progress. Interactive Windows 11/Explorer
-acceptance remains **NOT TESTED**. There is no verified Windows download yet. See [publication/build readiness](docs/PUBLICATION.md) and [test evidence](docs/TEST_RESULTS.md).
+**v0.1.0 release candidate — no GitHub Release or final tag.** Linux Mint GTK/X11
+is tested. The Windows x64 portable package passed automated verification on
+Windows Server 2022: **28 passed, 4 optional-engine skips**, plus packaged runtime
+and extracted-ZIP smoke checks. Interactive Windows 11 and Explorer acceptance
+remain **NOT TESTED**. [Actual CI run](https://github.com/o8bo/mandarin/actions/runs/39939527182) ·
+[Download Windows candidate](https://github.com/o8bo/mandarin/actions/runs/39939527182/artifacts/12495452024) ·
+[test evidence](docs/TEST_RESULTS.md).
 
 ![Mandarin Qt frontend running on Linux — not a Windows screenshot](docs/screenshots/qt-linux.png)
 
@@ -27,7 +30,7 @@ acceptance remains **NOT TESTED**. There is no verified Windows download yet. Se
 | Wheel | X11 desktop; window fallback on Wayland | In-app after drop/selection |
 | Desktop modifier / tray | Existing X11 behavior | Not implemented |
 | File actions | Existing Linux actions | Copy paths, open file/folder |
-| Runtime | System Python + GTK | Python included in future portable ZIP |
+| Runtime | System Python + GTK | Python included in portable ZIP |
 
 ## Install and run on Linux Mint
 
@@ -52,22 +55,25 @@ this development session.
 
 ## Windows target
 
-Build on Windows using [BUILDING.md](docs/BUILDING.md), or run the manual Windows
-Actions workflow after an approved push. A successful build creates
-`Mandarin-Windows-x64.zip`; extract all files and open `Mandarin/Mandarin.exe`.
-The workflow verifies PE x64, tests the bundled runtime, extracts the ZIP and
-launches it with the build Python removed from PATH. Native Windows CI has started; the first source-test attempt failed and
-prevented packaging. Follow the actual run records in TEST_RESULTS.md.
+Download **[Mandarin-Windows-x64-candidate](https://github.com/o8bo/mandarin/actions/runs/39939527182/artifacts/12495452024)** from the successful
+[Windows CI run](https://github.com/o8bo/mandarin/actions/runs/39939527182) (GitHub sign-in may be required; artifact retention is
+30 days). Extract the downloaded Actions artifact, verify the inner ZIP's
+SHA-256 against its `.sha256` file, then extract `Mandarin-Windows-x64.zip`.
+Open `Mandarin/Mandarin.exe`; keep `_internal` and `licenses` beside it. Python
+is bundled and is not required as a separate end-user installation.
 
-After a successful approved run, open **Actions → Build Windows portable
-candidate → successful run → Artifacts → Mandarin-Windows-x64-candidate**.
-Download and unpack the Actions artifact, then extract the inner portable ZIP.
-The artifact is a development candidate, not a published release. See
-[download/checksum instructions](docs/PUBLICATION.md#download-the-windows-artifact).
+The native runner checked PE32+ AMD64, Unicode filenames, safe publication,
+batches, cancellation, PDF/image conversions and Qt startup. It repeated the
+packaged checks after ZIP extraction with build Python removed from PATH.
+This is a development candidate; fresh Windows 11, native dialogs and Explorer
+OLE dragging still need manual acceptance. The first failed attempt and fixes
+are retained in [TEST_RESULTS.md](docs/TEST_RESULTS.md).
 
-Python is bundled. External conversion engines are optional, detected from PATH
-or configured in **Engines & settings**. See [Windows setup and acceptance
-checklist](docs/WINDOWS.md). No registry edits or system-wide Explorer hooks.
+FFmpeg, LibreOffice and Poppler are optional external engines, not bundled.
+Their missing tests are explicit skips. Configure trusted installed tools under
+**Engines & settings**. See [Windows setup/checklist](docs/WINDOWS.md),
+[build instructions](docs/BUILDING.md) and [download/checksum details](docs/PUBLICATION.md#download-the-windows-artifact).
+No registry edits or system-wide Explorer hooks are installed.
 
 Developers can launch the Windows frontend from source on either OS with Python
 3.12 and `pip install -r requirements-windows.txt`, then

@@ -1,11 +1,13 @@
 # Windows 11 x64
 
-Status: native Windows Server 2022 CI has started. The initial source-test run
-failed and prevented the EXE build; fixes are being verified. Interactive Windows
-11 desktop/Explorer acceptance is **NOT TESTED**. No verified Windows ZIP yet.
-See [PUBLICATION.md](PUBLICATION.md) for the repository and build instructions.
+Status: **automated Windows Server 2022 x64 verification PASS** in
+[run 39939527182](https://github.com/o8bo/mandarin/actions/runs/39939527182), source `08bcaf537cd39655305fa8f43504337bc4ae8b82`.
+32 tests: **28 passed, 0 failures/errors, 4 optional-engine skips**. Both frozen
+and extracted-ZIP functional smoke reports passed all 12 checks. Interactive
+Windows 11 desktop/Explorer acceptance remains **NOT TESTED**.
+[Download the verified candidate](https://github.com/o8bo/mandarin/actions/runs/39939527182/artifacts/12495452024); full instructions below.
 
-## Portable application (after a successful Windows build)
+## Portable application
 
 Extract the entire `Mandarin-Windows-x64.zip`, then launch `Mandarin/Mandarin.exe`.
 Keep `_internal` beside the executable. Python is included. Do not run the EXE
@@ -62,7 +64,8 @@ The workflow does not install those engines or infer their Windows correctness
 from Linux. Required dependency/native test skips fail the native test gate.
 
 A passing server-runner report would still leave the interactive checks below
-open. The first native source-test report is available; packaging is pending a passing run.
+open. The successful native source/build/ZIP reports are linked above; the previous
+failed attempt remains recorded in TEST_RESULTS.md.
 
 ## Native acceptance checklist
 
@@ -84,6 +87,6 @@ establish Explorer OLE behavior.
 - Test corrupt/unsupported files, hostile archives, ZIP/TAR round trip.
 - Close during work, wait for cancellation, close again; open history output folder.
 
-Automated native Windows Job/file-lock tests exist in `test_platform.py` and must
-pass on a Windows runner. Long paths depend on Windows policy and engine support;
+Automated native Windows Job/file-lock tests in `test_platform.py` passed on
+the linked Windows runner. Long paths depend on Windows policy and engine support;
 the app does not change that policy. Network share behavior has not been tested.

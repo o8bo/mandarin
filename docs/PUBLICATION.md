@@ -2,13 +2,16 @@
 
 ## Current state
 
-v0.1.0 is a release candidate with **no GitHub Release or final tag**. The owner
-approved public publication under [o8bo/mandarin](https://github.com/o8bo/mandarin).
-The existing initial commit `dc41d349237cdc78739e2ded40f88d6a217bc9ea` was pushed
-without rewriting history and the remote SHA matched exactly. Linux GTK/X11 has
-the documented verified behavior. The [first native Windows run](https://github.com/o8bo/mandarin/actions/runs/39938803037)
-failed at source tests; fixes/build verification are in progress. No verified
-Windows ZIP or interactive Windows 11 acceptance result exists yet.
+v0.1.0 is a release candidate with **no GitHub Release or final tag**. Public
+repository: [o8bo/mandarin](https://github.com/o8bo/mandarin), approved by the owner
+with the name requested without a Linux suffix. The original initial commit
+`dc41d349237cdc78739e2ded40f88d6a217bc9ea` was pushed unchanged; verified fixes
+followed without history rewriting. The [successful native Windows run](https://github.com/o8bo/mandarin/actions/runs/39939527182)
+built source `08bcaf537cd39655305fa8f43504337bc4ae8b82` on Windows Server 2022 x64:
+**32 tests, 28 passed, 4 optional-engine skips**, and 12/12 functional checks in
+both the frozen and extracted-ZIP reports. Source/EXE/ZIP hashes are recorded in
+TEST_RESULTS.md. Physical Windows 11 and Explorer acceptance remain NOT TESTED.
+Documentation-only updates may follow the compiled artifact's source commit.
 
 ## Publication review
 
@@ -45,20 +48,21 @@ pins. The build workflow is manual, has contents:read, does not persist checkout
 credentials, and contains no release/deployment/tag operation. Update pins after
 review as official versions change.
 
-## Publication authorization and native execution
+## Actual native execution
 
-The publication/push approval prerequisite has been satisfied. The workflow now
-runs on the real GitHub-hosted Windows executor. The initial run stopped before
-packaging because required tests failed; those failures are retained rather than
-bypassed. Current results and remaining gates are recorded in TEST_RESULTS.md.
+Publication approval, repository creation and the first source push are complete.
+The [first Windows attempt](https://github.com/o8bo/mandarin/actions/runs/39938803037)
+failed at required tests; its logs/diagnostics are preserved. Verified fixes led
+to the successful run above. No required failure was bypassed. FFmpeg, Poppler
+rasterization and LibreOffice absence remains visible in the four explicit skips.
 Workflow dispatch uses the default branch as [required by GitHub](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
 
 ## Repeatable publication/build procedure
 
-1. Create the public `mandarin` repository with **no generated README,
-   license, .gitignore or initial commit**, since those exist locally. Confirm
-   the intended owner. Preserve the existing local commit; do not force-push.
-2. Add that repository as origin, push `main`, and confirm `main` is the default.
+1. The public `o8bo/mandarin` repository already exists. Preserve the existing
+   history; do not reinitialize it or force-push.
+2. `origin` is configured and `main` is the default. Normal reviewed pushes
+   retain the existing initial commit and successful build source.
    Do not push a final v0.1.0 tag or publish a release yet.
 3. Open **Actions → Build Windows portable candidate → Run workflow → main**.
    If Actions is disabled, enable it through the repository's approved settings.
@@ -75,7 +79,17 @@ The first approved push is complete. No final tag or GitHub Release has been cre
 
 ## Download the Windows artifact
 
-**No Windows artifact is available yet.** Following a successful approved run:
+The verified candidate is available in [run 39939527182](https://github.com/o8bo/mandarin/actions/runs/39939527182).
+[Download candidate](https://github.com/o8bo/mandarin/actions/runs/39939527182/artifacts/12495452024) ·
+[download diagnostics](https://github.com/o8bo/mandarin/actions/runs/39939527182/artifacts/12495436992).
+These artifacts expire 2026-11-22 and are not a GitHub Release.
+
+Portable ZIP SHA-256:
+`37eda3a5ac8095ec1021e265153463553b9da1028cc70b8698b8f9402d81b5a0`.
+The outer Actions artifact has its own separate digest; compare the inner ZIP
+against the accompanying `.zip.sha256` file rather than the outer digest.
+
+Download procedure:
 
 - Open its Actions run and download **Mandarin-Windows-x64-candidate** under
   Artifacts. GitHub may require sign-in. Artifacts expire after 30 days.
@@ -95,5 +109,6 @@ On the runner, success paths are `dist/Mandarin/Mandarin.exe`,
 `dist/Mandarin-Windows-x64.zip`, its checksum, `dist/Mandarin-smoke.json`,
 `dist/Mandarin-portable-verification.json`,
 `dist/Mandarin-portable-verification-smoke.json`, and
-`verification/windows-tests.json`. These Windows files do not exist locally.
+`verification/windows-tests.json`. The downloaded portable ZIP/checksum are also retained locally under ignored
+`dist/`, with actual reports/logs under ignored `verification/`.
 Optional external engines and remaining manual tests are listed in WINDOWS.md.

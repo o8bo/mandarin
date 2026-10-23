@@ -12,8 +12,10 @@
 - Reviews public source separately from retained local investigation evidence;
   prepares an initial local commit without pushing or publishing.
 
-This is a development candidate. Windows native execution, Explorer dragging,
-packaging and clean Windows 11 acceptance have not been tested in the Linux
-workspace. No Windows executable or public release has been produced here.
-See TEST_RESULTS.md and WINDOWS.md. Do not advertise validated Windows support
-until a Windows build and acceptance record are available.
+This is a development candidate. [Native Windows Server CI](https://github.com/o8bo/mandarin/actions/runs/39939527182) passed
+28 automated tests with 4 explicit optional-engine skips, built a PE32+ AMD64
+portable ZIP, and passed 12 frozen checks before and after extraction. The initial
+failed run remains documented. Fresh Windows 11, Explorer dragging, native dialogs,
+DPI/multiple-monitor acceptance and optional external converters remain untested.
+No GitHub Release or final v0.1.0 tag has been published. See TEST_RESULTS.md and
+WINDOWS.md for scope, checksum and remaining acceptance gates.
