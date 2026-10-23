@@ -37,7 +37,9 @@ class PlatformTests(unittest.TestCase):
         for name in ['NUL.txt','C:/escape','a:stream','trailing.','a\\b']:
             with self.subTest(name=name):
                 archive=self.root/'bad.zip'
-                with zipfile.ZipFile(archive,'w') as z:z.writestr(name,'bad')
+                info=zipfile.ZipInfo(name);info.filename=info.orig_filename=name
+                with zipfile.ZipFile(archive,'w') as z:z.writestr(info,'bad')
+                with zipfile.ZipFile(archive) as z:self.assertEqual(z.infolist()[0].orig_filename,name)
                 with self.assertRaises(engine.OperationError):engine.run_operation('archive:extract',[archive])
                 self.assertEqual([x.name for x in self.root.iterdir()],['bad.zip'])
     def test_real_document_conversion(self):

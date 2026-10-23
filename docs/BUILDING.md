@@ -39,7 +39,8 @@ It uses pinned, verified Node 24 action commits; versions and SHA values are
 recorded in PUBLICATION.md. Diagnostics and a job summary are retained on failures;
 required test/build failures keep their nonzero status.
 It has read-only repository permissions and does not publish a release. It has
-**not been run** from the Linux workspace. Manual workflows must first exist on
+**been dispatched** from the Linux workspace to a native Windows runner; see
+TEST_RESULTS.md for the actual outcome. Manual workflows must first exist on
 the default branch: [GitHub instructions](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
 Do not push or publish until the owner approves. A runner smoke test is not a
 fresh Windows 11 desktop acceptance test.

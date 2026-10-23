@@ -20,10 +20,10 @@ def files():
 
 def main():
     selected=list(files());manifest={str(rel):hashlib.sha256(path.read_bytes()).hexdigest() for path,rel in selected}
-    output=ROOT/'dist';output.mkdir(exist_ok=True);dest=output/'mandarin-linux-v0.1.0-rc-source.zip'
+    output=ROOT/'dist';output.mkdir(exist_ok=True);dest=output/'mandarin-v0.1.0-rc-source.zip'
     with zipfile.ZipFile(dest,'w',zipfile.ZIP_DEFLATED) as z:
-        for path,relative in selected:z.write(path,Path('mandarin-linux')/relative)
-        z.writestr('mandarin-linux/SOURCE-MANIFEST.json',json.dumps(manifest,indent=2)+'\n')
+        for path,relative in selected:z.write(path,Path('mandarin')/relative)
+        z.writestr('mandarin/SOURCE-MANIFEST.json',json.dumps(manifest,indent=2)+'\n')
     digest=hashlib.sha256(dest.read_bytes()).hexdigest();dest.with_suffix('.zip.sha256').write_text(digest+'  '+dest.name+'\n')
     print(f'{len(selected)} source files; {dest}');print(digest)
 

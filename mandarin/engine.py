@@ -217,7 +217,9 @@ def _extract(path,dest,cancelled):
     if zipfile.is_zipfile(path):
         with zipfile.ZipFile(path) as z:
             for m in z.infolist():
-                count+=1;size+=m.file_size;target=_safe_member(m.filename,dest)
+                # ZipInfo normalizes backslashes on Windows and truncates NULs
+                # in filename. Validate the original header name first.
+                count+=1;size+=m.file_size;target=_safe_member(m.orig_filename,dest)
                 if stat.S_ISLNK(m.external_attr>>16):raise OperationError('Archive symbolic links are not allowed.')
                 if count>MAX_ARCHIVE_FILES or size>MAX_ARCHIVE_BYTES:raise OperationError('Archive exceeds the extraction safety limit.')
                 members.append((m,target))

@@ -21,11 +21,14 @@ class BuildVerificationTests(unittest.TestCase):
     def test_rejects_archive_escape_and_case_collisions(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);archive=root/'app.zip'
-            for names in [['../escape'],['C:/escape'],['x\\escape'],['Mandarin/a','Mandarin/A']]:
+            for index,names in enumerate([['../escape'],['C:/escape'],['x\\escape'],['Mandarin/a','Mandarin/A']]):
                 with self.subTest(names=names):
                     with zipfile.ZipFile(archive,'w') as z:
-                        for name in names:z.writestr(name,'fixture')
-                    with self.assertRaises(ValueError):v.unpack(archive,root/'out')
-                    self.assertFalse((root/'out').exists())
+                        for name in names:
+                            info=zipfile.ZipInfo(name);info.filename=info.orig_filename=name
+                            z.writestr(info,'fixture')
+                    output=root/f'out-{index}'
+                    with self.assertRaises(ValueError):v.unpack(archive,output)
+                    self.assertFalse(output.exists())
 
 if __name__=='__main__':unittest.main()

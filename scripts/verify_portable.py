@@ -37,8 +37,9 @@ def unpack(archive,dest):
         members=z.infolist()
         if len(members)>10000:raise ValueError('Portable ZIP has too many entries')
         for member in members:
-            name=PurePosixPath(member.filename)
-            if not name.parts or name.is_absolute() or '..' in name.parts or '\\' in member.filename or ':' in member.filename or stat.S_ISLNK(member.external_attr>>16):
+            raw_name=member.orig_filename
+            name=PurePosixPath(raw_name)
+            if not name.parts or name.is_absolute() or '..' in name.parts or '\\' in raw_name or ':' in raw_name or '\0' in raw_name or stat.S_ISLNK(member.external_attr>>16):
                 raise ValueError('Unsafe portable ZIP member')
             key=str(name).casefold()
             if key in seen:raise ValueError('Duplicate portable ZIP member')

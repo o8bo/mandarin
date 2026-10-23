@@ -1,8 +1,9 @@
 # Windows 11 x64
 
-Status: implemented source and native build workflow; **NOT TESTED on Windows**
-in the Linux development session. There is no verified Windows ZIP yet. See [PUBLICATION.md](PUBLICATION.md) for
-workflow execution and artifact download/checksum instructions.
+Status: native Windows Server 2022 CI has started. The initial source-test run
+failed and prevented the EXE build; fixes are being verified. Interactive Windows
+11 desktop/Explorer acceptance is **NOT TESTED**. No verified Windows ZIP yet.
+See [PUBLICATION.md](PUBLICATION.md) for the repository and build instructions.
 
 ## Portable application (after a successful Windows build)
 
@@ -49,7 +50,7 @@ or Explorer context menus. No claim is made that desktop-wide Explorer dragging
 opens the wheel. Session history is memory-only. File actions currently cover
 copying paths, opening files and opening their containing folder.
 
-## Automated runner verification (not executed yet)
+## Automated runner verification
 
 The native Windows workflow requires Windows Server 2022 x64 / Python 3.12. It
 runs the source suite (including file-lock and Job-object tests), builds a PE32+
@@ -61,7 +62,7 @@ The workflow does not install those engines or infer their Windows correctness
 from Linux. Required dependency/native test skips fail the native test gate.
 
 A passing server-runner report would still leave the interactive checks below
-open. No such Windows report exists yet.
+open. The first native source-test report is available; packaging is pending a passing run.
 
 ## Native acceptance checklist
 

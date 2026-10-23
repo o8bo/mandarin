@@ -141,3 +141,31 @@ and found no configured secret/private-path patterns or unexpected binaries;
 the only binaries are the two generated UI PNGs. This scan is supplemental,
 not a complete security guarantee. Upstream notices remain verbatim; whitespace
 checks are scoped to Mandarin's own code/docs to preserve those license texts.
+
+## First actual native Windows run — 2026-10-23
+
+The earlier NOT TESTED statements describe the pre-publication stage. After
+explicit owner approval, the initial commit was pushed unchanged to the public
+[o8bo/mandarin](https://github.com/o8bo/mandarin) repository and workflow
+[39938803037](https://github.com/o8bo/mandarin/actions/runs/39938803037) ran on
+Windows Server 2022 x64 / CPython 3.12.10. Required native Job-object startup,
+process-tree cancellation, file-lock/no-overwrite and most Qt tests passed.
+The run **failed**: 32 cases, 4 failure records (including subtest records),
+1 error and 4 explicit optional-engine skips. Packaging correctly did not run.
+
+Verified problems addressed for the next attempt:
+
+- Subtitle fixture text used the Windows cp1252 default instead of explicit UTF-8.
+- Windows ZipInfo normalizes backslashes when creating/reading entries. Malicious
+  fixtures now preserve raw header names and validators inspect `orig_filename`
+  before normalization; no archive rejection assertion was removed.
+- Qt worker completion timed out under a Python loop calling QTest.qWait. Tests
+  now use a real nested Qt event loop, retain the same 10-second assertion limit,
+  and include the worker stack on timeout. Native rerun will establish the fix.
+- Test reports now count unique failed cases when several subtests fail, while
+  retaining all individual failure records and tracebacks.
+
+The original failed logs and diagnostics remain locally under `verification/` and
+in the linked GitHub run. FFmpeg (two tests), Poppler rasterization (one test) and
+LibreOffice (one test) were absent and explicitly skipped, not treated as passed.
+Local targeted regression after the fixes: 10 cases PASS. Native rerun pending.

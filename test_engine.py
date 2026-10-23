@@ -55,10 +55,10 @@ class EngineTests(unittest.TestCase):
             with self.assertRaises(e.OperationError):e.run_operation('archive:extract',[out])
         finally:e.MAX_ARCHIVE_BYTES=old
     def test_subtitle_timing_roundtrip(self):
-        p=self.root/'a.srt';p.write_text('1\n00:01:02,123 --> 00:01:05,456\nأهلاً\n\n2\n00:01:07,000 --> 00:01:08,000\nSecond cue\n')
-        vtt=Path(e.run_operation('subtitle:vtt',[p])['outputs'][0]);self.assertIn('00:01:02.123 --> 00:01:05.456',vtt.read_text())
-        back=Path(e.run_operation('subtitle:srt',[vtt])['outputs'][0]);self.assertIn('00:01:02,123 --> 00:01:05,456',back.read_text());self.assertIn('أهلاً',back.read_text())
-        txt=Path(e.run_operation('subtitle:txt',[vtt])['outputs'][0]);self.assertNotIn('-->',txt.read_text())
+        p=self.root/'a.srt';p.write_text('1\n00:01:02,123 --> 00:01:05,456\nأهلاً\n\n2\n00:01:07,000 --> 00:01:08,000\nSecond cue\n',encoding='utf-8')
+        vtt=Path(e.run_operation('subtitle:vtt',[p])['outputs'][0]);self.assertIn('00:01:02.123 --> 00:01:05.456',vtt.read_text(encoding='utf-8'))
+        back=Path(e.run_operation('subtitle:srt',[vtt])['outputs'][0]);self.assertIn('00:01:02,123 --> 00:01:05,456',back.read_text(encoding='utf-8'));self.assertIn('أهلاً',back.read_text(encoding='utf-8'))
+        txt=Path(e.run_operation('subtitle:txt',[vtt])['outputs'][0]);self.assertNotIn('-->',txt.read_text(encoding='utf-8'))
     @unittest.skipUnless(e.capabilities()['pypdf'],'pypdf unavailable')
     def test_pdf_merge_split_rotate(self):
         from pypdf import PdfWriter,PdfReader

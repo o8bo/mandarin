@@ -1,11 +1,13 @@
 """Qt integration tests. Synthetic Qt drops do not certify Windows Explorer OLE."""
 import tempfile
 import time
+import sys
+import traceback
 from pathlib import Path
 import threading
 import unittest
 from unittest.mock import patch
-from PySide6.QtCore import Qt,QMimeData,QUrl,QPoint,QPointF,QTimer
+from PySide6.QtCore import Qt,QMimeData,QUrl,QPoint,QPointF,QTimer,QEventLoop
 from PySide6.QtGui import QDragEnterEvent,QDropEvent
 from PySide6.QtTest import QTest
 from mandarin.qt_ui import QApplication,MainWindow,RadialMenu,OptionsDialog,STYLE,local_drop_paths
@@ -20,13 +22,22 @@ class QtTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name);self.source=self.root/'صورة 日本語.png';Image.new('RGBA',(40,20),(10,20,30,128)).save(self.source)
         self.window=MainWindow();self.window.show();self.app.processEvents()
     def tearDown(self):
-        self.window.cancel();deadline=time.monotonic()+8
-        while self.window.working and time.monotonic()<deadline:self.app.processEvents();QTest.qWait(10)
+        self.window.cancel();self.pump_until_idle(8000)
         self.window.close();self.app.processEvents();self.temp.cleanup()
+    def pump_until_idle(self,timeout_ms):
+        if not self.window.working:return
+        # A real Qt event loop releases the GIL for the conversion worker.
+        # Repeated QTest.qWait calls can starve Python workers on Windows.
+        loop=QEventLoop();poll=QTimer(loop);timeout=QTimer(loop)
+        poll.timeout.connect(lambda:loop.quit() if not self.window.working else None)
+        timeout.setSingleShot(True);timeout.timeout.connect(loop.quit)
+        poll.start(10);timeout.start(timeout_ms);loop.exec();poll.stop();timeout.stop()
     def wait_finished(self):
-        deadline=time.monotonic()+10
-        while self.window.working and time.monotonic()<deadline:QTest.qWait(15)
-        self.assertFalse(self.window.working)
+        self.pump_until_idle(10000)
+        worker=self.window.runner.thread
+        frame=sys._current_frames().get(worker.ident) if worker else None
+        detail=''.join(traceback.format_stack(frame)) if frame else 'No worker frame'
+        self.assertFalse(self.window.working,self.window.status.text()+'\n'+detail)
     def test_file_folder_and_destination_dialog_wiring(self):
         with patch('mandarin.qt_ui.QFileDialog.getOpenFileNames',return_value=([str(self.source)],'')):self.window.choose_files()
         self.assertEqual(self.window.selected_paths(),[str(self.source)])

@@ -2,12 +2,13 @@
 
 ## Current state
 
-v0.1.0 is an **unpublished release candidate**. Linux GTK/X11 has the documented
-verified behavior. The Windows frontend/build recipe exists; **no Windows CI run,
-EXE build, portable Windows ZIP, or interactive Windows 11 acceptance has run**.
-The first commit is local only; see `git log -1`. No remote is configured and
-nothing has been pushed or released. Generic project commit attribution is used
-rather than a personal email address.
+v0.1.0 is a release candidate with **no GitHub Release or final tag**. The owner
+approved public publication under [o8bo/mandarin](https://github.com/o8bo/mandarin).
+The existing initial commit `dc41d349237cdc78739e2ded40f88d6a217bc9ea` was pushed
+without rewriting history and the remote SHA matched exactly. Linux GTK/X11 has
+the documented verified behavior. The [first native Windows run](https://github.com/o8bo/mandarin/actions/runs/39938803037)
+failed at source tests; fixes/build verification are in progress. No verified
+Windows ZIP or interactive Windows 11 acceptance result exists yet.
 
 ## Publication review
 
@@ -44,21 +45,17 @@ pins. The build workflow is manual, has contents:read, does not persist checkout
 credentials, and contains no release/deployment/tag operation. Update pins after
 review as official versions change.
 
-## Why Windows verification is currently blocked
+## Publication authorization and native execution
 
-This workspace has no native Windows executor. The manual workflow must exist
-on the GitHub repository's default branch before it can be dispatched
-([official requirement](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow)).
-A repository does not technically have to be public to run Actions. However,
-the owner has prohibited **any push/publication without explicit approval**, so
-we have not created/pushed a temporary private or public repository to bypass
-that instruction. This is a publication-approval dependency, not a successful
-Windows build. Alternatively, the owner can run BUILDING.md on a Windows machine
-without publishing anything.
+The publication/push approval prerequisite has been satisfied. The workflow now
+runs on the real GitHub-hosted Windows executor. The initial run stopped before
+packaging because required tests failed; those failures are retained rather than
+bypassed. Current results and remaining gates are recorded in TEST_RESULTS.md.
+Workflow dispatch uses the default branch as [required by GitHub](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
 
-## Steps after explicit owner approval
+## Repeatable publication/build procedure
 
-1. Create the public `mandarin-linux` repository with **no generated README,
+1. Create the public `mandarin` repository with **no generated README,
    license, .gitignore or initial commit**, since those exist locally. Confirm
    the intended owner. Preserve the existing local commit; do not force-push.
 2. Add that repository as origin, push `main`, and confirm `main` is the default.
@@ -74,7 +71,7 @@ without publishing anything.
    resulting DLL/license inventory and signing status. Only after those results
    and a separate release approval should a public v0.1.0 release be considered.
 
-No command in this document has been used to push or publish the current source.
+The first approved push is complete. No final tag or GitHub Release has been created.
 
 ## Download the Windows artifact
 

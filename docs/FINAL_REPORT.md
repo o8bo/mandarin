@@ -47,7 +47,7 @@ OLE drag/drop, native dialogs or clean Windows 11 desktop acceptance.
 ## 6. Artifacts
 
 Local source candidate:
-`dist/mandarin-linux-v0.1.0-rc-source.zip`, with `.zip.sha256` and an internal
+`dist/mandarin-v0.1.0-rc-source.zip`, with `.zip.sha256` and an internal
 per-file manifest. No private runtime, vendor binary, Git data or logs are in it.
 
 Local packaging diagnostic only:
@@ -73,7 +73,7 @@ provided. Linux defaults and existing Wayland fallback design remain unchanged.
 
 ## 8. Publication instructions
 
-After explicit owner approval, create the empty public `mandarin-linux`
+After explicit owner approval, create the empty public `mandarin`
 repository, push the existing `main` commit without force, confirm the default
 branch, then manually run **Build Windows portable candidate**. Read actual tests,
 skips and diagnostic artifacts before downloading the candidate. Verify SHA-256,
@@ -87,5 +87,5 @@ Do not create a final v0.1.0 release or advertise Windows verification premature
 The GitHub-hosted Windows workflow must first be pushed to a repository's default
 branch. Public visibility is not technically required, but the owner has barred
 any push/publication without explicit approval. No temporary repository was
-created to bypass that boundary. Approval to create/push `mandarin-linux` is the
+created to bypass that boundary. Approval to create/push `mandarin` is the
 remaining publication prerequisite; a Windows host is the offline alternative.

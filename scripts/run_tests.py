@@ -21,8 +21,10 @@ def main():
         try:versions[name]=metadata.version(name)
         except metadata.PackageNotFoundError:versions[name]='NOT INSTALLED'
     disallowed_skips=[(str(t),reason) for t,reason in result.skipped if not any(s in reason for s in ['FFmpeg unavailable','PDF tools unavailable','LibreOffice not installed'])] if args.require_windows else []
+    failed_cases={getattr(test,'test_case',test).id() for test,_ in result.failures+result.errors}
+    skipped_cases={getattr(test,'test_case',test).id() for test,_ in result.skipped}
     report={'platform':platform.platform(),'python':platform.python_version(),'dependencies':versions,
-        'tests_run':result.testsRun,'passed':result.testsRun-len(result.failures)-len(result.errors)-len(result.skipped),
+        'tests_run':result.testsRun,'passed':result.testsRun-len(failed_cases|skipped_cases),'failed_test_cases':len(failed_cases),
         'failures':[(str(t),s) for t,s in result.failures],'errors':[(str(t),s) for t,s in result.errors],
         'skipped_not_tested':[(str(t),s) for t,s in result.skipped],
         'duration_seconds':round(time.monotonic()-started,3),'successful':result.wasSuccessful() and not disallowed_skips,'required_windows_tests':args.require_windows,'disallowed_required_skips':disallowed_skips,

@@ -4,9 +4,9 @@ Local file conversion with a radial menu. Keep files on your own computer,
 choose a format and save a new output without overwriting the original.
 
 **v0.1.0 release candidate, unpublished.** Linux Mint GTK/X11 is tested.
-The Windows 11 x64 frontend and build pipeline are implemented; native Windows
-execution/build and Explorer acceptance are **NOT TESTED**. There is no verified
-Windows download yet. See [publication/build readiness](docs/PUBLICATION.md) and [test evidence](docs/TEST_RESULTS.md).
+The first native Windows Server CI run exposed test portability issues; fixes
+and packaged-build verification are in progress. Interactive Windows 11/Explorer
+acceptance remains **NOT TESTED**. There is no verified Windows download yet. See [publication/build readiness](docs/PUBLICATION.md) and [test evidence](docs/TEST_RESULTS.md).
 
 ![Mandarin Qt frontend running on Linux — not a Windows screenshot](docs/screenshots/qt-linux.png)
 
@@ -56,8 +56,8 @@ Build on Windows using [BUILDING.md](docs/BUILDING.md), or run the manual Window
 Actions workflow after an approved push. A successful build creates
 `Mandarin-Windows-x64.zip`; extract all files and open `Mandarin/Mandarin.exe`.
 The workflow verifies PE x64, tests the bundled runtime, extracts the ZIP and
-launches it with the build Python removed from PATH. These Windows checks have
-**not run yet**; local packaging verification used Linux only.
+launches it with the build Python removed from PATH. Native Windows CI has started; the first source-test attempt failed and
+prevented packaging. Follow the actual run records in TEST_RESULTS.md.
 
 After a successful approved run, open **Actions → Build Windows portable
 candidate → successful run → Artifacts → Mandarin-Windows-x64-candidate**.
