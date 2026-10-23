@@ -1,0 +1,41 @@
+@define-color accent #cf672d;
+@define-color ink #252c28;
+window { background: #f8f6f0; color: @ink; font-family: "Noto Sans", "DejaVu Sans", sans-serif; font-size: 13px; }
+headerbar { background: #f8f6f0; border-bottom: 1px solid #e2ded4; box-shadow: none; }
+headerbar .title { font-weight: 700; color: @ink; }
+headerbar .subtitle { color: #7c8178; font-size: 11px; }
+button { background: #ffffff; background-image: none; border: 1px solid #dddcd2; border-radius: 8px; padding: 8px 13px; color: @ink; box-shadow: none; text-shadow: none; }
+button:hover { background: #eeeae0; }
+button:disabled { opacity: 0.48; }
+button.primary { background: @accent; border-color: @accent; color: white; font-weight: 600; padding: 11px 18px; }
+button.primary:hover { background: #b95523; }
+.sidebar { background: #28322d; color: #f7f4e9; padding: 24px; }
+.brand { color: #f1ac71; font-size: 14px; font-weight: 800; letter-spacing: 2px; }
+.sidebar-title { color: #faf8f0; font-size: 20px; font-weight: 600; }
+.eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; color: #858b7f; }
+.sidebar .eyebrow { color: #a6b1a4; }
+.sidebar .privacy { color: #bbc4b8; font-size: 11px; }
+button.nav { background: transparent; color: #cbd3c8; border: 1px solid transparent; padding: 12px 10px; text-shadow: none; }
+button.nav:hover { background: #354139; }
+button.nav.active { background: #465044; color: #ffcb9e; border-color: #505d4e; font-weight: 700; }
+.heading { font-size: 24px; font-weight: 700; letter-spacing: -0.6px; }
+.muted { color: #7b8076; font-size: 12px; }
+.dropzone { background: #f0eee4; border: 1px dashed #c6c8b8; border-radius: 12px; }
+.drop-title { font-size: 17px; font-weight: 600; color: #53604b; }
+list { background: transparent; }
+list row { background: #fffefa; border-radius: 6px; margin-bottom: 4px; }
+list row:selected { background: #f5dec7; color: @ink; }
+.file-kind { color: #92968a; font-size: 9px; letter-spacing: 0.5px; }
+button.flat { background: transparent; border-color: transparent; padding: 4px 8px; color: #7c8175; }
+button.flat:hover { background: #e8e5da; }
+button.operation { background: #fffefa; border: 1px solid #e4e1d7; border-radius: 9px; padding: 0; }
+button.operation:hover { background: #fff7e9; border-color: #cfb499; }
+.card-title { font-weight: 600; font-size: 14px; }
+.arrow { color: @accent; font-size: 21px; }
+.empty-title { font-size: 19px; color: #58634f; font-weight: 600; }
+button.history { background: transparent; border-color: transparent; padding: 6px; font-size: 11px; }
+progressbar trough { background: #e5e3d8; border: none; border-radius: 6px; min-height: 8px; }
+progressbar progress { background: @accent; border: none; border-radius: 6px; min-height: 8px; }
+entry, combobox button { background: #fffefa; border: 1px solid #d3d6c8; border-radius: 6px; padding: 8px; }
+scrolledwindow { border: none; }
+scrollbar slider { background: #c6c8bc; border-radius: 10px; min-width: 5px; min-height: 30px; }

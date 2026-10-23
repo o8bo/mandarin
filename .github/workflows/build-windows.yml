@@ -1,0 +1,70 @@
+name: Build Windows portable candidate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: windows-candidate-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  portable:
+    runs-on: windows-2022
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Verify native Windows x64 build host
+        run: |
+          New-Item -ItemType Directory -Force verification | Out-Null
+          python -c "import platform,struct,sys; assert sys.platform == 'win32' and struct.calcsize('P') == 8 and platform.machine().lower() in ('amd64','x86_64') and sys.version_info[:2] == (3,12); print(platform.platform(), sys.version)"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Install pinned build dependencies
+        run: python -m pip install -r requirements-build.txt
+      - name: Record resolved dependencies
+        run: python -m pip freeze --all > verification/windows-dependencies.txt
+      - name: Test native Windows primitives and Qt events
+        id: tests
+        run: python scripts/run_tests.py --require-windows --report verification/windows-tests.json
+      - name: Build PE x64, test frozen app and unpacked ZIP
+        id: build
+        run: |
+          python -u scripts/build_portable.py --target windows 2>&1 | Tee-Object -FilePath verification/windows-build.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Upload verified portable candidate
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Mandarin-Windows-x64-candidate
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            dist/Mandarin-Windows-x64.zip
+            dist/Mandarin-Windows-x64.zip.sha256
+      - name: Summarize actual results
+        if: always()
+        env:
+          TEST_OUTCOME: ${{ steps.tests.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+        run: python scripts/ci_summary.py
+      - name: Retain diagnostics on success or failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Mandarin-Windows-diagnostics
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            verification/windows-*.json
+            verification/windows-*.txt
+            verification/windows-*.log
+            dist/*-smoke.json
+            dist/*-portable-verification.json
+            dist/Mandarin/BUILD-REPORT.json
+      # No release action, tags, deployment or repository write permission.

@@ -1,0 +1,48 @@
+name: Test shared engine and frontends
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  shared-and-qt:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - run: python -m pip install -r requirements-windows.txt
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libreoffice-writer poppler-utils libegl1 libopengl0
+      # Optional Windows engines are not auto-downloaded. Missing tools appear
+      # as skips in unittest output, not as claims of tested media/doc support.
+      - run: python scripts/run_tests.py --report test-results.json
+      - run: python -m mandarin --self-test qt-smoke.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: startup-${{ runner.os }}
+          path: |
+            qt-smoke.json
+            test-results.json
+  linux-gtk-x11:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-pil python3-pypdf gir1.2-gtk-3.0 xvfb libxtst6 ffmpeg
+      - run: xvfb-run -a /usr/bin/python3 test_drag_flow.py
