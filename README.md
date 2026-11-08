@@ -115,3 +115,5 @@ Tangerine branding/assets.
 
 [Original Arabic documentation](docs/README.ar.md) is retained as historical
 Linux documentation; the English instructions above describe this candidate.
+## AI assistance
+I used AI tools to help develop and document this project.
